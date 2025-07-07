@@ -4,8 +4,7 @@ const { createSQLServerConnection } = require('../../db');
 
 const JWT_SECRET = 'yourSecretKey';
 
-exports.register = async ({ fullName, email, password, phone }) => {
-    console.log('password:', password);
+exports.register = async ({ fullName, email, password, phone, role }) => {
     const pool = await createSQLServerConnection();
     const checkResult = await pool
         .request()
@@ -18,12 +17,16 @@ exports.register = async ({ fullName, email, password, phone }) => {
     const hashed = await bcrypt.hash(password, 10);
     const request = pool.request();
 
+    // Validate role
+    const validRoles = ['candidate', 'hr', 'admin'];
+    const userRole = (role && validRoles.includes(role.toLowerCase())) ? role.toLowerCase() : 'candidate';
+
     await request
         .input('FullName', fullName)
         .input('Email', email)
         .input('PasswordHash', hashed)
         .input('Phone', phone || null)
-        .input('Role', 'candidate') // mặc định
+        .input('Role', userRole)
         .query(`
       INSERT INTO Users (FullName, Email, PasswordHash, Role)
       VALUES (@FullName, @Email, @PasswordHash, @Role)

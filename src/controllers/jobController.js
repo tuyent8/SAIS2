@@ -11,3 +11,13 @@ exports.createJob = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+exports.searchJobs = async (req, res) => {
+    try {
+        const { keyword } = req.query;
+        const jobs = await jobService.searchJobs(keyword);
+        res.json(jobs);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
