@@ -8,9 +8,13 @@ const { requireRole } = require('../middleware/role');
 // Chỉ HR mới được đăng job
 router.post('/', verifyToken, requireRole('hr'), jobController.createJob);
 
-// Candidate tìm kiếm job theo tên vị trí hoặc công ty
-router.get('/search', verifyToken, requireRole('candidate'), jobController.searchJobs);
+// Lấy danh sách tất cả job (có phân trang)
+router.get('/', verifyToken, jobController.getAllJobs);
+router.get('/search', verifyToken, requireRole('jobapplication'), jobController.searchJobs);
+// Lấy chi tiết job theo ID
+router.get('/:id', verifyToken, jobController.getJobById);
 
-// (Có thể bổ sung các API khác: lấy danh sách job, chi tiết job, xóa/sửa job...)
+// JobApplication tìm kiếm job theo tên vị trí hoặc công ty
+
 
 module.exports = router;

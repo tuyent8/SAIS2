@@ -27,3 +27,30 @@ exports.getCVById = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+exports.getCVsByUser = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const cvs = await cvService.getCVsByUser(userId);
+        res.json(cvs);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+exports.updateCV = async (req, res) => {
+    try {
+        const result = await cvService.updateCV(req.params.id, req.user.userId, req.body);
+        res.json(result);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+exports.deleteCV = async (req, res) => {
+    try {
+        const result = await cvService.deleteCV(req.params.id, req.user.userId);
+        res.json(result);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};

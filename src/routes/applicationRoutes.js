@@ -4,13 +4,17 @@ const applicationController = require('../controllers/applicationController');
 const { verifyToken } = require('../middleware/auth');
 const { requireRole } = require('../middleware/role');
 
-// Candidate nộp đơn vào job
-router.post('/', verifyToken, requireRole('candidate'), applicationController.createApplication);
+// JobApplication nộp đơn vào job
+router.post('/', verifyToken, requireRole('jobapplication'), applicationController.createApplication);
+
+// HR phê duyệt/từ chối application
+router.put('/:applicationId/status', verifyToken, requireRole('hr'), applicationController.updateApplicationStatus);
 
 // HR xem danh sách application cho job của mình
 router.get('/job/:jobId', verifyToken, requireRole('hr'), applicationController.getApplicationsByJob);
 
-// Candidate xem các application của mình
-router.get('/my', verifyToken, requireRole('candidate'), applicationController.getApplicationsByUser);
+// JobApplication xem các application của mình
+router.get('/my', verifyToken, requireRole('jobapplication'), applicationController.getApplicationsByUser);
+router.get('/my-status', verifyToken, requireRole('jobapplication'), applicationController.getApplicationStatusByUser);
 
 module.exports = router;

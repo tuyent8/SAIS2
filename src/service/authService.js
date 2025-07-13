@@ -18,8 +18,8 @@ exports.register = async ({ fullName, email, password, phone, role }) => {
     const request = pool.request();
 
     // Validate role
-    const validRoles = ['candidate', 'hr', 'admin'];
-    const userRole = (role && validRoles.includes(role.toLowerCase())) ? role.toLowerCase() : 'candidate';
+    const validRoles = ['jobapplication', 'hr', 'admin'];
+    const userRole = (role && validRoles.includes(role.toLowerCase())) ? role.toLowerCase() : 'jobapplication';
 
     await request
         .input('FullName', fullName)
